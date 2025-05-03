@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CommUnity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1F509A;
+            --secondary: #E38E49;
+            --accent: #0A3981;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(0,0,0,0.2) 100%);
+            z-index: -1;
+            animation: pulse 10s infinite;
+        }
+
+        header {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            font-size: xx-large;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-around;
+            background: var(--accent);
+            padding: 1rem;
+            flex-wrap: wrap;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+        }
+
+        nav a {
+            color: var(--secondary);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            margin: 0.25rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: all 0.5s;
+        }
+
+        nav a:hover::before {
+            left: 100%;
+        }
+
+        nav a:hover {
+            background: var(--glass);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section {
+            display: none;
+            background: var(--glass);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: var(--glass);
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            box-sizing: border-box;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.3);
+        }
+
+        input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        button:hover::after {
+            width: 200%;
+            height: 200%;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .message, .announcement, .inventory-item, .complaint, 
+        .help-request, .community-post, .community-recognition, .goal {
+            background: var(--glass);
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .message:hover, .announcement:hover, .inventory-item:hover, 
+        .complaint:hover, .help-request:hover, .community-post:hover, 
+        .community-recognition:hover, .goal:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .actions button {
+            background: var(--primary);
+            margin-right: 0.5rem;
+            padding: 0.5rem 1rem;
+        }
+
+        .actions button:hover {
+            background: var(--accent);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            .form-container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>CommUnity</h1>
+    </header>
+
+    <nav>
+        <a href="#login" onclick="showSection('login')">Login</a>
+        <a href="#signup" onclick="showSection('signup')">Sign Up</a>
+        <a href="#messaging" onclick="showSection('messaging')">Messaging</a>
+        <a href="#announcements" onclick="showSection('announcements')">Announcements</a>
+        <a href="#inventory" onclick="showSection('inventory')">Inventory</a>
+        <a href="#complaints" onclick="showSection('complaints')">Complaints</a>
+        <a href="#help" onclick="showSection('help')">Help</a>
+        <a href="#posts" onclick="showSection('posts')">Community Posts</a>
+        <a href="#goals" onclick="showSection('goals')">Goals</a>
+        <a href="#profile" onclick="showSection('profile')">My Profile</a>
+    </nav>
+
+    <div class="container">
+        <div id="login" class="section active">
+            <div class="form-container">
+                <h2>Log In</h2>
+                <input type="email" id="login-email" placeholder="Email" />
+                <input type="password" id="login-password" placeholder="Password" />
+                <button onclick="login()">Log In</button>
+            </div>
+        </div>
+
+        <div id="signup" class="section">
+            <div class="form-container">
+                <h2>Sign Up</h2>
+                <input type="text" id="signup-name" placeholder="Full Name" />
+                <input type="email" id="signup-email" placeholder="Email" />
+                <input type="password" id="signup-password" placeholder="Password" />
+                <button onclick="signup()">Sign Up</button>
+            </div>
+        </div>
+
+        <div id="messaging" class="section">
+            <h2>Messaging</h2>
+            <div class="message">
+                <h3>John Doe</h3>
+                <p>Hello, how are you?</p>
+                <div class="actions">
+                    <button>Reply</button>
+                    <button>Delete</button>
+                </div>
+            </div>
+            <div class="message">
+                <h3>Jane Smith</h3>
+                <p>Can you join the meeting tomorrow?</p>
+                <div class="actions">
+                    <button>Reply</button>
+                    <button>Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="announcements" class="section">
+            <h2>Announcements</h2>
+            <div class="announcement">
+                <h3>Community Meeting</h3>
+                <p>Saturday at 5 PM</p>
+                <div class="actions">
+                    <button>Save</button>
+                    <button>Delete</button>
+                </div>
+            </div>
+            <div class="announcement">
+                <h3>Neighborhood Cleanup</h3>
+                <p>This Sunday</p>
+                <div class="actions">
+                    <button>Save</button>
+                    <button>Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="inventory" class="section">
+            <h2>Inventory</h2>
+            <div class="inventory-item">
+                <h3>Lawn Mower</h3>
+                <p>Owner: John Doe</p>
+                <p>Contact: 123-456-7890</p>
+                <div class="actions">
+                    <button>Contact Owner</button>
+                    <button>Delete</button>
+                </div>
+            </div>
+            <div class="inventory-item">
+                <h3>Power Drill</h3>
+                <p>Owner: Jane Smith</p>
+                <p>Contact: 987-654-3210</p>
+                <div class="actions">
+                    <button>Contact Owner</button>
+                    <button>Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="complaints" class="section">
+            <h2>Complaints</h2>
+            <div class="complaint">
+                <h3>Street Light Issue</h3>
+                <p>Reported by: John Doe</p>
+                <p>Elm Street light not working</p>
+                <div class="actions">
+                    <button>Resolve</button>
+                    <button>Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="help" class="section">
+            <h2>Help Requests</h2>
+            <div class="help-request">
+                <h3>Grocery Shopping</h3>
+                <p>Requested by: John Doe</p>
+                <p>Need help this weekend</p>
+                <div class="actions">
+                    <button>Volunteer</button>
+                    <button>Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="posts" class="section">
+            <h2>Community Posts</h2>
+            <div class="community-post">
+                <h3>Neighborhood BBQ</h3>
+                <p>Posted by: John Doe</p>
+                <p>Great time last weekend!</p>
+                <div class="actions">
+                    <button>Like</button>
+                    <button>Comment</button>
+                    <button>Share</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="goals" class="section">
+            <h2>Community Goals</h2>
+            <div class="goal">
+                <h3>Clean Streets</h3>
+                <p>Daily goal: Keep streets clean</p>
+                <div class="actions">
+                    <button>Track Progress</button>
+                    <button>Delete</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="profile" class="section">
+            <h2>My Profile</h2>
+            <div class="form-group">
+                <input type="text" id="profile-name" placeholder="Name">
+                <input type="email" id="profile-email" placeholder="Email">
+                <input type="text" id="profile-contact" placeholder="Contact Number">
+                <button>Update Profile</button>
+                <button onclick="logout()">Log Out</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            if (email && password) {
+                alert('Logging in...');
+                showSection('messaging');
+            }
+        }
+
+        function signup() {
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            if (name && email && password) {
+                alert('Account created!');
+                showSection('login');
+            }
+        }
+
+        function logout() {
+            alert('Logged out');
+            showSection('login');
+        }
+
+        window.onload = function() {
+            window.scrollTo(0, 0);
+        };
+    </script>
+</body>
+</html>
